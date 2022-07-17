@@ -6,11 +6,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ArticleView(
-    val id: Int,
+    val id: Long,
     val url: String,
     val publishedDate: String,
     val section: String,
     val title: String,
-    val source: String,
+    val byline: String,
     val imageURL: String
 ) : Parcelable

@@ -29,7 +29,7 @@ private fun createClient(): OkHttpClient {
         addInterceptor { chain ->
             val newUrl = chain.request().url()
                 .newBuilder()
-                .addQueryParameter("apikey", BuildConfig.PRIVATE_KEY)
+                .addQueryParameter("api-key", BuildConfig.PRIVATE_KEY)
                 .build()
 
             val newRequest = chain.request()

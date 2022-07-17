@@ -4,12 +4,12 @@ import com.tomasm.articles.data.models.view.ArticleView
 import com.tomasm.core.extensions.orEmpty
 
 data class Article(
-    val id: Int?,
+    val id: Long?,
     val url: String?,
     val publishedDate: String?,
     val section: String?,
     val title: String?,
-    val source: String?,
+    val byline: String?,
     val imageURL: String?
 ) {
 
@@ -19,7 +19,7 @@ data class Article(
         publishedDate.orEmpty(),
         section.orEmpty(),
         title.orEmpty(),
-        source.orEmpty(),
+        byline.orEmpty(),
         imageURL.orEmpty()
     )
 }

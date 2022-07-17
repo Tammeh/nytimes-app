@@ -11,7 +11,7 @@ import com.tomasm.core.extensions.orEmpty
 @Entity
 data class ArticlesEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int?,
+    val id: Long?,
     @SerializedName("num_results")
     val numResults: Int?,
     @SerializedName("results")

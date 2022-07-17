@@ -28,7 +28,7 @@ android {
     flavorDimensions "enviroment"
     productFlavors {
         prod {
-            buildConfigField "String", "BASE_URL", "\"https://api.nytimes.com/svc/mostpopular/v2/\""
+            buildConfigField "String", "BASE_URL", "\"https://api.nytimes.com/\""
             buildConfigField "String", "PRIVATE_KEY", properties.getProperty("PRIVATE_KEY")?:"\"\""
         }
     }

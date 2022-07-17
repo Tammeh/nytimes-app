@@ -1,16 +1,18 @@
 package com.tomasm.articles.data.models.entity
 
 import androidx.room.Entity
+import com.google.gson.annotations.SerializedName
 import com.tomasm.articles.data.models.data.Article
 
 @Entity
 data class ArticleEntity(
-    val id: Int?,
+    @SerializedName("id")
+    val id: Long?,
     val url: String?,
     val published_date: String?,
     val section: String?,
     val title: String?,
-    val source: String?,
+    val byline: String?,
     val media: MutableList<MediaEntity>?
 ) {
 
@@ -21,7 +23,7 @@ data class ArticleEntity(
             published_date,
             section,
             title,
-            source,
+            byline,
             getFirstImageIfExist(media)
         )
 

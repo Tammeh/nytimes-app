@@ -23,8 +23,8 @@ class ArticlesDataSourceImpl @Inject constructor(
     private suspend fun getArticlesFromService(type: String, period: String, share_type: String): Response<ArticlesView> {
         return service.getArticles(type, period, share_type).run {
             if(isSuccessful && body() != null){
-                val results = body()!!.results
-                saveLocal(results)
+                val results = body()
+                saveLocal(results!!)
                 Success(results.toArticles().toArticleView())
             }else{
                 Error(Failure.ServerError(code()))
