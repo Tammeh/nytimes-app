@@ -3,9 +3,7 @@ package com.tomasm.articles.core.di
 import com.tomasm.articles.data.datasource.ArticlesDataSource
 import com.tomasm.articles.data.datasource.ArticlesDataSourceImpl
 import com.tomasm.articles.data.local.ArticlesLocal
-import com.tomasm.articles.data.repository.ArticlesRespositoryImpl
 import com.tomasm.articles.data.service.ArticlesService
-import com.tomasm.articles.domain.repository.ArticlesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,10 +20,6 @@ object BaseModule {
         return ArticlesDataSourceImpl(service, local)
     }
 
-    @Singleton
-    @Provides
-    fun provideArticlesRepository(dataSource: ArticlesDataSource): ArticlesRepository {
-        return ArticlesRespositoryImpl(dataSource)
-    }
+
 
 }
