@@ -10,7 +10,7 @@ data class Article(
     val section: String?,
     val title: String?,
     val source: String?,
-    val media: MutableList<Media>?
+    val imageURL: String?
 ) {
 
     fun toArticleView() = ArticleView(
@@ -20,6 +20,6 @@ data class Article(
         section.orEmpty(),
         title.orEmpty(),
         source.orEmpty(),
-        media.orEmpty()
+        imageURL.orEmpty()
     )
 }

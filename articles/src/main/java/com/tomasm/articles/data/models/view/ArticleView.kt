@@ -12,5 +12,5 @@ data class ArticleView(
     val section: String,
     val title: String,
     val source: String,
-    val media: MutableList<Media>
+    val imageURL: String
 ) : Parcelable
