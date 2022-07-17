@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/filtersFragment">
+
+    <fragment
+        android:id="@+id/filtersFragment"
+        android:name="com.tomasm.nytimesapp.views.fragments.FiltersFragment"
+        android:label="fragment_filters"
+        tools:layout="@layout/fragment_filters" >
+        <action
+            android:id="@+id/action_filtersFragment_to_articlesListFragment"
+            app:destination="@id/articlesListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/articlesListFragment"
+        android:name="com.tomasm.nytimesapp.views.fragments.ArticlesListFragment"
+        android:label="ArticlesListFragment" >
+        <action
+            android:id="@+id/action_articlesListFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.tomasm.nytimesapp.views.fragments.ArticleFragment"
+        android:label="ArticleFragment" />
+</navigation>
