@@ -1,3 +1,14 @@
 <resources>
-    <string name="app_name">NYTimesApp</string>
+    <string name="app_name">NY Times</string>
+    <string name="most_filter_title">Filtrar por</string>
+    <string name="period_filter_title">Periodo</string>
+    <string name="social_filter_title">Red Social</string>
+    <string name="days">Días</string>
+    <string name="type">Tipo</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="search_articles">Buscar articulos</string>
+    <string name="empty_state_text">La búsqueda no arrojó resultados…</string>
+    <string name="filter_error">Falta seleccionar algun filtro</string>
+    <string name="webview_error">Ha ocurrido un error al cargar el artículo.</string>
 </resources>
