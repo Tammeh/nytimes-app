@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">NYTimesApp</string>
+    <string name="most_filter_title">Filtrar por</string>
+    <string name="period_filter_title">Periodo</string>
+    <string name="social_filter_title">Red Social</string>
+    <string name="days">Días</string>
+    <string name="type">Tipo</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="search_articles">Buscar articulos</string>
 </resources>
