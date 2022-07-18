@@ -135,7 +135,7 @@ class FiltersFragment : BaseFragment() {
         val list = mutableListOf<String>()
         if (binding.facebookCb.isChecked) list.add(binding.facebookCb.text.toString())
         if (binding.twitterCb.isChecked) list.add(binding.twitterCb.text.toString())
-        return if (list.isNotEmpty()) "/" + list.joinToString(Constants.TYPESHARE_SEPARATOR)
+        return if (list.isNotEmpty() && validateCheckBox()) "/" + list.joinToString(Constants.TYPESHARE_SEPARATOR)
             .lowercase() else ""
     }
 
