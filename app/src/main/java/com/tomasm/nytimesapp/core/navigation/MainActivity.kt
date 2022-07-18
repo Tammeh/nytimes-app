@@ -1,7 +1,8 @@
 package com.tomasm.nytimesapp.core.navigation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.tomasm.nytimesapp.R
@@ -26,5 +27,11 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        navController.popBackStack()
+        binding.progress.visibility = View.GONE
+        return true
     }
 }

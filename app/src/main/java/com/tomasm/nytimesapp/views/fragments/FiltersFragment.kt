@@ -11,9 +11,12 @@ import androidx.navigation.fragment.findNavController
 import com.tomasm.articles.data.models.view.ArticlesView
 import com.tomasm.core.extensions.failure
 import com.tomasm.core.extensions.observe
+import com.tomasm.core.utils.Constants
 import com.tomasm.core.utils.FilterItem
+import com.tomasm.core.utils.FiltersProvider
 import com.tomasm.nytimesapp.R
 import com.tomasm.nytimesapp.core.base.BaseFragment
+import com.tomasm.nytimesapp.core.navigation.MainActivity
 import com.tomasm.nytimesapp.databinding.FragmentFiltersBinding
 import com.tomasm.nytimesapp.views.viewmodel.ArticlesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,19 +24,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FiltersFragment : BaseFragment() {
 
-    private lateinit var typeSelected: FilterItem
-    private lateinit var periodSelected: FilterItem
 
-    val mostItemList = mutableListOf(
-        FilterItem("Mas vistos", "mostviewed"),
-        FilterItem("Mas compartidos por mail", "mostemailed"),
-        FilterItem("Mas compartidos en redes", "mostshared")
-    )
-    val periodItemList = mutableListOf(
-        FilterItem("1 Día", "1"),
-        FilterItem("7 Días", "7"),
-        FilterItem("30 Días", "30")
-    )
+    private var typeSelected: FilterItem? = null
+    private var periodSelected: FilterItem? = null
 
     private var _binding: FragmentFiltersBinding? = null
     private val binding get() = _binding!!
@@ -53,7 +46,7 @@ class FiltersFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFiltersBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -61,50 +54,89 @@ class FiltersFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setFiltersView()
+        setToolbar()
+    }
+
+    private fun setToolbar() {
+        (activity as MainActivity).supportActionBar?.title = getString(R.string.app_name)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     private fun setFiltersView() {
-        val adapterMost = ArrayAdapter(requireContext(), R.layout.filter_list_item, mostItemList)
-        binding.autoCompleteTxtMost.setAdapter(adapterMost)
-        binding.autoCompleteTxtMost.setOnItemClickListener { adapterView, view, i, l ->
-            typeSelected = adapterView.getItemAtPosition(i) as FilterItem
-        }
-
-        val adapter = ArrayAdapter(requireContext(), R.layout.filter_list_item, periodItemList)
-        binding.autoCompleteTxtPeriod.setAdapter(adapter)
-        binding.autoCompleteTxtPeriod.setOnItemClickListener { adapterView, view, i, l ->
-            periodSelected = adapterView.getItemAtPosition(i) as FilterItem
-        }
-
+        setFilterType()
+        setFilterPeriod()
         binding.searchButton.setOnClickListener {
             checkButton()
         }
 
     }
 
-    private fun checkButton() {
-        if (!binding.textInputLayoutPeriod.editText?.text.isNullOrEmpty()
-            && !binding.textInputLayoutMost.editText?.text.isNullOrEmpty()
-            && binding.facebookCb.isChecked
-        ) {
-            getArticles(
-                typeSelected.serviceName,
-                periodSelected.serviceName
-            )
-        } else {
-            Toast.makeText(requireContext(), "No anduvo boton", Toast.LENGTH_SHORT).show()
+    private fun setFilterPeriod() {
+        val adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.filter_list_item,
+            FiltersProvider.periodItemList
+        )
+        binding.autoCompleteTxtPeriod.setAdapter(adapter)
+        binding.autoCompleteTxtPeriod.setOnItemClickListener { adapterView, _, i, _ ->
+            periodSelected = adapterView.getItemAtPosition(i) as FilterItem
         }
     }
+
+    private fun setFilterType() {
+        val adapterMost =
+            ArrayAdapter(requireContext(), R.layout.filter_list_item, FiltersProvider.mostItemList)
+        binding.autoCompleteTxtMost.setAdapter(adapterMost)
+        binding.autoCompleteTxtMost.setOnItemClickListener { adapterView, _, i, _ ->
+            typeSelected = adapterView.getItemAtPosition(i) as FilterItem
+            if (typeSelected?.serviceName.equals(Constants.MOST_SHARED, true)) {
+                binding.constraintChecks.visibility = View.VISIBLE
+            } else {
+                binding.constraintChecks.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun checkButton() {
+        if (filtersAreSelected() || filtersAreSelected() && validateCheckBox()) {
+            getArticles(
+                typeSelected!!.serviceName,
+                periodSelected!!.serviceName,
+                getShareTypes()
+            )
+        } else {
+            Toast.makeText(requireContext(), getString(R.string.filter_error), Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+
 
     private fun getArticles(type: String, period: String, shareType: String = "") {
         viewModel.getArticles(type, period, shareType)
     }
 
     private fun navToArticleList(articlesView: ArticlesView?) {
-        val directions = FiltersFragmentDirections.actionFiltersFragmentToArticlesListFragment(articlesView!!)
+        val directions =
+            FiltersFragmentDirections.actionFiltersFragmentToArticlesListFragment(articlesView!!)
         findNavController().navigate(directions)
+    }
+
+    private fun validateCheckBox() = (typeSelected!!.serviceName.equals(
+        Constants.MOST_SHARED,
+        true
+    ) && (binding.facebookCb.isChecked || binding.twitterCb.isChecked))
+
+    private fun filtersAreSelected() = (typeSelected != null
+            && periodSelected != null)
+
+    private fun getShareTypes(): String {
+        val list = mutableListOf<String>()
+        if (binding.facebookCb.isChecked) list.add(binding.facebookCb.text.toString())
+        if (binding.twitterCb.isChecked) list.add(binding.twitterCb.text.toString())
+        return if (list.isNotEmpty()) "/" + list.joinToString(Constants.TYPESHARE_SEPARATOR)
+            .lowercase() else ""
     }
 
     override fun onDestroyView() {

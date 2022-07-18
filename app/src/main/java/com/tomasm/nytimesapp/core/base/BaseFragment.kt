@@ -30,7 +30,7 @@ abstract class BaseFragment : Fragment() {
     }
 
 
-    private fun toast(text: String) {
+    internal fun toast(text: String) {
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
     }
 }

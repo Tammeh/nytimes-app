@@ -7,11 +7,11 @@ import retrofit2.http.Path
 
 interface ArticlesApi {
 
-    @GET("svc/mostpopular/v2/{type}/all-sections/{period}{share_type}.json")
+    @GET("svc/mostpopular/v2/{type}/all-sections{share_type}/{period}.json")
     suspend fun getArticles(
         @Path("type") type: String,
         @Path("period") period: String,
-        @Path("share_type") share_type: String = ""
+        @Path("share_type", encoded = true) share_type: String = ""
     ): Response<ArticlesEntity>
 
 }
