@@ -3,6 +3,7 @@ package com.tomasm.articles.data.models.entity
 import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 import com.tomasm.articles.data.models.data.Article
+import com.tomasm.core.extensions.empty
 
 @Entity
 data class ArticleEntity(
@@ -15,6 +16,19 @@ data class ArticleEntity(
     val byline: String?,
     val media: MutableList<MediaEntity>?
 ) {
+
+    companion object{
+        fun toEmpty() =
+            ArticleEntity(
+                Long.empty(),
+                String.empty(),
+                String.empty(),
+                String.empty(),
+                String.empty(),
+                String.empty(),
+                mutableListOf()
+            )
+    }
 
     fun toArticle() =
         Article(

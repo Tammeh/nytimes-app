@@ -30,7 +30,7 @@ class ArticlesDataSourceImpl @Inject constructor(
                 if (isSuccessful && body() != null) {
                     val results = body()
                     saveLocal(results!!)
-                    Success(results.toArticles().toArticleView())
+                    Success(results.toArticles().toArticlesView())
                 } else {
                     getArticlesFromDataBase(message())
                 }
@@ -43,7 +43,7 @@ class ArticlesDataSourceImpl @Inject constructor(
     private fun getArticlesFromDataBase(code: String): Response<ArticlesView> {
         val articles = local.getArticles()
         return if (!articles.results.isNullOrEmpty()) {
-            Success(articles.toArticles().toArticleView())
+            Success(articles.toArticles().toArticlesView())
         } else {
             Error(Failure.CustomError(0, code))
         }

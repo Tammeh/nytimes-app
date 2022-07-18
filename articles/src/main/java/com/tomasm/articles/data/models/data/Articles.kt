@@ -9,7 +9,7 @@ data class Articles(
 ) {
 
 
-    fun toArticleView() = ArticlesView(
+    fun toArticlesView() = ArticlesView(
         results?.map {it.toArticleView()}?.toMutableList().orEmpty()
     )
 }
