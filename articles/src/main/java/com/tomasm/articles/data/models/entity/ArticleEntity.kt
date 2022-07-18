@@ -28,7 +28,11 @@ data class ArticleEntity(
         )
 
     private fun getFirstImageIfExist(media: MutableList<MediaEntity>?): String {
-        return media?.get(0)?.mediaMetadata?.get(0)?.url ?: ""
-
+        if(!media.isNullOrEmpty()){
+            if(!media[0].mediaMetadata.isNullOrEmpty()){
+                return media[0].mediaMetadata?.get(0)?.url ?: ""
+            }
+        }
+        return ""
     }
 }
