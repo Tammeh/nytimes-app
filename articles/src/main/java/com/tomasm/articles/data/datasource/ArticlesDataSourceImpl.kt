@@ -9,6 +9,7 @@ import com.tomasm.core.functional.Error
 import com.tomasm.core.functional.Response
 import com.tomasm.core.functional.Success
 import kotlinx.coroutines.flow.flow
+import java.lang.Exception
 import javax.inject.Inject
 
 class ArticlesDataSourceImpl @Inject constructor(
@@ -16,19 +17,35 @@ class ArticlesDataSourceImpl @Inject constructor(
     private val local: ArticlesLocal
 ) : ArticlesDataSource {
     override fun getArticles(type: String, period: String, share_type: String) = flow {
-        //TODO: Checker database local
         emit(getArticlesFromService(type, period, share_type))
     }
 
-    private suspend fun getArticlesFromService(type: String, period: String, share_type: String): Response<ArticlesView> {
-        return service.getArticles(type, period, share_type).run {
-            if(isSuccessful && body() != null){
-                val results = body()
-                saveLocal(results!!)
-                Success(results.toArticles().toArticleView())
-            }else{
-                Error(Failure.ServerError(code()))
+    private suspend fun getArticlesFromService(
+        type: String,
+        period: String,
+        share_type: String
+    ): Response<ArticlesView> {
+        return try {
+            return service.getArticles(type, period, share_type).run {
+                if (isSuccessful && body() != null) {
+                    val results = body()
+                    saveLocal(results!!)
+                    Success(results.toArticles().toArticleView())
+                } else {
+                    getArticlesFromDataBase(message())
+                }
             }
+        } catch (e: Exception) {
+            getArticlesFromDataBase(e.message?: "Ocurrio un error inesperado")
+        }
+    }
+
+    private fun getArticlesFromDataBase(code: String): Response<ArticlesView> {
+        val articles = local.getArticles()
+        return if (!articles.results.isNullOrEmpty()) {
+            Success(articles.toArticles().toArticleView())
+        } else {
+            Error(Failure.CustomError(0, code))
         }
     }
 
