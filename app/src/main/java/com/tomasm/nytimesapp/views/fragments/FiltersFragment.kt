@@ -33,6 +33,14 @@ class FiltersFragment : BaseFragment() {
 
     private val viewModel by viewModels<ArticlesViewModel>()
 
+    private val adapterPeriod by lazy {
+        ArrayAdapter(requireContext(), R.layout.filter_list_item, FiltersProvider.periodItemList)
+    }
+
+    private val adapterType by lazy {
+        ArrayAdapter(requireContext(), R.layout.filter_list_item, FiltersProvider.mostItemList)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,22 +80,16 @@ class FiltersFragment : BaseFragment() {
 
     }
 
+
     private fun setFilterPeriod() {
-        val adapter = ArrayAdapter(
-            requireContext(),
-            R.layout.filter_list_item,
-            FiltersProvider.periodItemList
-        )
-        binding.autoCompleteTxtPeriod.setAdapter(adapter)
+        binding.autoCompleteTxtPeriod.setAdapter(adapterPeriod)
         binding.autoCompleteTxtPeriod.setOnItemClickListener { adapterView, _, i, _ ->
             periodSelected = adapterView.getItemAtPosition(i) as FilterItem
         }
     }
 
     private fun setFilterType() {
-        val adapterMost =
-            ArrayAdapter(requireContext(), R.layout.filter_list_item, FiltersProvider.mostItemList)
-        binding.autoCompleteTxtMost.setAdapter(adapterMost)
+        binding.autoCompleteTxtMost.setAdapter(adapterType)
         binding.autoCompleteTxtMost.setOnItemClickListener { adapterView, _, i, _ ->
             typeSelected = adapterView.getItemAtPosition(i) as FilterItem
             if (typeSelected?.serviceName.equals(Constants.MOST_SHARED, true)) {
@@ -112,7 +114,6 @@ class FiltersFragment : BaseFragment() {
     }
 
 
-
     private fun getArticles(type: String, period: String, shareType: String = "") {
         viewModel.getArticles(type, period, shareType)
     }
@@ -125,11 +126,9 @@ class FiltersFragment : BaseFragment() {
 
     private fun validateCheckBox() = (typeSelected!!.serviceName.equals(
         Constants.MOST_SHARED,
-        true
-    ) && (binding.facebookCb.isChecked || binding.twitterCb.isChecked))
+        true) && (binding.facebookCb.isChecked || binding.twitterCb.isChecked))
 
-    private fun filtersAreSelected() = (typeSelected != null
-            && periodSelected != null)
+    private fun filtersAreSelected() = (typeSelected != null && periodSelected != null)
 
     private fun getShareTypes(): String {
         val list = mutableListOf<String>()
@@ -137,6 +136,24 @@ class FiltersFragment : BaseFragment() {
         if (binding.twitterCb.isChecked) list.add(binding.twitterCb.text.toString())
         return if (list.isNotEmpty() && validateCheckBox()) "/" + list.joinToString(Constants.TYPESHARE_SEPARATOR)
             .lowercase() else ""
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        clearFilters()
+    }
+
+
+    private fun clearFilters() {
+        binding.autoCompleteTxtPeriod.text.clear()
+        binding.textInputLayoutPeriod.editText?.text?.clear()
+        binding.autoCompleteTxtMost.text.clear()
+        binding.textInputLayoutMost.editText?.text?.clear()
+        binding.twitterCb.isChecked = false
+        binding.facebookCb.isChecked = false
+        typeSelected = null
+        periodSelected = null
     }
 
     override fun onDestroyView() {

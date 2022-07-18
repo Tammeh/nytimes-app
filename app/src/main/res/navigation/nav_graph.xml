@@ -25,9 +25,6 @@
         <argument
             android:name="articles"
             app:argType="com.tomasm.articles.data.models.view.ArticlesView" />
-        <action
-            android:id="@+id/action_articlesListFragment_to_filtersFragment"
-            app:destination="@id/filtersFragment" />
     </fragment>
     <fragment
         android:id="@+id/articleFragment"
@@ -37,8 +34,5 @@
         <argument
             android:name="article"
             app:argType="com.tomasm.articles.data.models.view.ArticleView" />
-        <action
-            android:id="@+id/action_articleFragment_to_articlesListFragment"
-            app:destination="@id/articlesListFragment" />
     </fragment>
 </navigation>

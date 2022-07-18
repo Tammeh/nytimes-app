@@ -23,6 +23,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     internal open fun handleFailure(failure: Failure?) {
+        progressStatus(false)
         when (failure) {
             is Failure.NetworkConnection -> toast("Parece que no tienes conexión")
             else -> toast("Ha ocurrido un error inseperado")
